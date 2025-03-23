@@ -4,9 +4,39 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tap Up 🎮</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <h1>Bienvenue sur Tap Up 🎮</h1>
-  <p>Le site est prêt à être publié !</p>
+  <div class="container">
+    <img src="assets/logo.png" alt="Tap Up Logo" class="logo" />
+    <h1>Bienvenue sur Tap Up 🎮</h1>
+    <p>Le jeu interactif ultime pour les soirées en bar/resto</p>
+
+    <h2>🎯 Sélectionne une catégorie :</h2>
+    <div class="categories">
+      <button>🧠 Culture Générale</button>
+      <button>😂 Humour</button>
+      <button>🤣 Blagues</button>
+      <button>🔥 Défis</button>
+      <button>🎭 Mystère</button>
+      <button>💘 Dating</button>
+      <button>🤝 Se connaître</button>
+      <button>💃 Célibataires</button>
+    </div>
+
+    <h2>👥 Entrez les prénoms des joueurs :</h2>
+    <div id="players">
+      <input type="text" placeholder="Joueur 1" />
+      <input type="text" placeholder="Joueur 2" />
+      <input type="text" placeholder="Joueur 3" />
+      <input type="text" placeholder="Joueur 4" />
+      <input type="text" placeholder="Joueur 5" />
+      <input type="text" placeholder="Joueur 6" />
+    </div>
+
+    <button id="start">🚀 Démarrer la partie</button>
+  </div>
+
+  <script src="script.js"></script>
 </body>
 </html>
