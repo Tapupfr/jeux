@@ -7,20 +7,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <img src="actif/logo.png" alt="Logo TapUp" class="logo">
-  <h1>Bienvenue sur Tap Up 🎮</h1>
-  <p class="intro">Choisis une catégorie, entre les prénoms des joueurs et c'est parti !</p>
+  <header>
+    <img src="actif/logo.png" alt="Tap Up Logo">
+    <h1>Bienvenue sur Tap Up 🎮</h1>
+    <p class="intro">Le jeu interactif ultime pour les soirées en bar/resto</p>
+  </header>
 
-  <h2>🎯 Choisis ta catégorie :</h2>
-  <div id="categories" class="category-list">
+  <h2>🎯 Sélectionne une catégorie :</h2>
+  <div id="categories">
     <button data-category="Culture Générale">🧠 Culture Générale</button>
     <button data-category="Humour">😂 Humour</button>
     <button data-category="Blagues">🤣 Blagues</button>
     <button data-category="Défis">🔥 Défis</button>
-    <button data-category="Mystère">🎭 Mystère</button>
+    <button data-category="Mystère">🕵️ Mystère</button>
     <button data-category="Dating">💘 Dating</button>
     <button data-category="Se connaître">🤝 Se connaître</button>
-    <button data-category="Célibataires">🕺 Célibataires</button>
+    <button data-category="Célibataires">💃 Célibataires</button>
     <button data-category="Famille">👨‍👩‍👧‍👦 Famille</button>
   </div>
 
@@ -33,15 +35,13 @@
     <input type="text" placeholder="Joueur 5">
     <input type="text" placeholder="Joueur 6">
   </div>
+  <button id="startGame">🎯 Démarrer la partie</button>
 
-  <button id="startGame">🎲 Démarrer la partie</button>
-
-  <div id="questionContainer" class="question-box" style="display: none;"></div>
+  <div id="questionContainer"></div>
 
   <footer>
     © 2025 Tap Up - Tous droits réservés
   </footer>
-
-  <script type="module" src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
