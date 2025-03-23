@@ -19,9 +19,7 @@ let questionsAsked = [];
 let currentPlayerIndex = 0;
 let turnCount = {};
 
-const questionBox = document.getElementById("questionContainer");
 const startButton = document.getElementById("startGame");
-const inputs = document.querySelectorAll(".player-inputs input");
 const categoryButtons = document.querySelectorAll("#categories button");
 
 categoryButtons.forEach(button => {
@@ -49,8 +47,12 @@ startButton.addEventListener("click", () => {
 
   questionsAsked = [];
   currentPlayerIndex = 0;
-  questionBox.style.display = "block";
-  showNextQuestion();
+
+  const gameWindow = window.open("", "GameWindow", "width=600,height=600");
+  gameWindow.document.write(`<div id="questionContainer" style="font-family: sans-serif; padding: 20px;"></div>`);
+  gameWindow.document.write(`<div id="scoresContainer" style="font-family: sans-serif; padding: 20px;"></div>`);
+
+  showNextQuestion(gameWindow);
 });
 
 function pickRandomQuestion() {
@@ -61,64 +63,72 @@ function pickRandomQuestion() {
   return question;
 }
 
-function showNextQuestion() {
+function updateScores(gameWindow) {
+  const scoresHtml = Object.entries(scores).map(([player, score]) => `<p>${player}: ${score}</p>`).join("");
+  gameWindow.document.getElementById("scoresContainer").innerHTML = `<h3>Scores actuels :</h3>${scoresHtml}`;
+}
+
+function showNextQuestion(gameWindow) {
   if (players.every(player => turnCount[player] >= 3)) {
-    endGame();
+    endGame(gameWindow);
     return;
   }
 
   const player = players[currentPlayerIndex];
   if (turnCount[player] >= 3) {
     currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-    showNextQuestion();
+    showNextQuestion(gameWindow);
     return;
   }
 
   const question = pickRandomQuestion();
   if (!question) {
-    questionBox.innerHTML = "Plus de questions disponibles dans cette catégorie !";
+    gameWindow.document.getElementById("questionContainer").innerHTML = "Plus de questions disponibles dans cette catégorie !";
     return;
   }
 
-  questionBox.innerHTML = `
-    <div class="player-highlight">🔥 À toi de jouer, ${player} !</div>
-    <div class="question-text">${question}</div>
+  gameWindow.document.getElementById("questionContainer").innerHTML = `
+    <div style="font-weight:bold; font-size:1.2em;">🔥 À toi de jouer, ${player} !</div>
+    <div style="margin:10px 0;">${question}</div>
     <button id="success">✅ Réussi</button>
     <button id="fail">❌ Échoué</button>
   `;
 
-  document.getElementById("success").onclick = () => answerQuestion(player, true);
-  document.getElementById("fail").onclick = () => answerQuestion(player, false);
+  gameWindow.document.getElementById("success").onclick = () => answerQuestion(player, true, gameWindow);
+  gameWindow.document.getElementById("fail").onclick = () => answerQuestion(player, false, gameWindow);
+
+  updateScores(gameWindow);
 }
 
-function answerQuestion(player, succeeded) {
+function answerQuestion(player, succeeded, gameWindow) {
   if (succeeded) scores[player] += 1;
   turnCount[player] += 1;
 
   currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-  showNextQuestion();
+  showNextQuestion(gameWindow);
 }
 
-function endGame() {
+function endGame(gameWindow) {
   const minScore = Math.min(...Object.values(scores));
   const losers = players.filter(player => scores[player] === minScore);
   const loser = losers[Math.floor(Math.random() * losers.length)];
 
-  questionBox.innerHTML = `
-    <div class="loser-announcement">😅 Dommage ${loser}, tu es notre grand perdant !</div>
+  gameWindow.document.getElementById("questionContainer").innerHTML = `
+    <div style="font-weight:bold; color:red;">😅 Dommage ${loser}, tu es notre grand perdant !</div>
     <button id="showGage">🎭 Découvrir mon gage</button>
   `;
 
-  document.getElementById("showGage").onclick = showGage;
+  gameWindow.document.getElementById("showGage").onclick = () => showGage(gameWindow);
+  updateScores(gameWindow);
 }
 
-function showGage() {
+function showGage(gameWindow) {
   const randomGage = Gages[Math.floor(Math.random() * Gages.length)];
 
-  questionBox.innerHTML = `
-    <div class="gage">${randomGage}</div>
+  gameWindow.document.getElementById("questionContainer").innerHTML = `
+    <div style="font-size:1.2em; color:blue;">${randomGage}</div>
     <button id="replay">🔄 Rejouer</button>
   `;
 
-  document.getElementById("replay").onclick = () => location.reload();
+  gameWindow.document.getElementById("replay").onclick = () => location.reload();
 }
