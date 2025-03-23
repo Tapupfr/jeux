@@ -27,14 +27,12 @@
   </div>
 
   <h2>👥 Entrez les prénoms des joueurs :</h2>
-  <div class="player-inputs">
+  <div class="player-inputs" id="playerInputs">
     <input type="text" placeholder="Joueur 1">
     <input type="text" placeholder="Joueur 2">
-    <input type="text" placeholder="Joueur 3">
-    <input type="text" placeholder="Joueur 4">
-    <input type="text" placeholder="Joueur 5">
-    <input type="text" placeholder="Joueur 6">
   </div>
+  <button id="addPlayer">➕ Ajouter un joueur</button>
+
   <div class="start-button-wrapper">
     <button id="startGame">🎲 Démarrer la partie</button>
   </div>
@@ -45,5 +43,21 @@
     © 2025 Tap Up - Tous droits réservés
   </footer>
   <script src="script.js"></script>
+  <script>
+    const addPlayerBtn = document.getElementById('addPlayer');
+    const playerInputs = document.getElementById('playerInputs');
+
+    addPlayerBtn.addEventListener('click', () => {
+      const playerCount = playerInputs.getElementsByTagName('input').length;
+      if(playerCount < 15) {
+        const newInput = document.createElement('input');
+        newInput.type = 'text';
+        newInput.placeholder = `Joueur ${playerCount + 1}`;
+        playerInputs.appendChild(newInput);
+      } else {
+        alert("Vous avez atteint le maximum de 15 joueurs.");
+      }
+    });
+  </script>
 </body>
 </html>
