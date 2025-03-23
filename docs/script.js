@@ -1,44 +1,16 @@
 const Categories = {
-  "Culture Générale": [
-    "Quel est le plus grand océan du monde ?",
-    "Combien de pays y a-t-il dans l'Union européenne ?",
-    "Quel pays a pour capitale Canberra ?",
-    "Quelle planète est surnommée la planète rouge ?"
-  ],
-  "Humour": [
-    "Imite un animal jusqu'à ce qu'on devine lequel.",
-    "Fais semblant de rire comme un super-vilain.",
-    "Imite ton voisin pendant 10 secondes."
-  ],
-  "Blagues": [
-    "Pourquoi les plongeurs plongent-ils en arrière ?",
-    "Quel est le comble pour un jardinier ?"
-  ],
-  "Défis": [
-    "Danse sans musique pendant 20 secondes.",
-    "Chante l'alphabet à l'envers."
-  ],
-  "Mystère": [
-    "Quel est ton rêve le plus secret ?",
-    "Quel est ton secret en cuisine ?"
-  ],
-  "Dating": [
-    "Quelle est ta date idéale ?",
-    "As-tu déjà eu un coup de foudre ?"
-  ],
-  "Se connaître": [
-    "Quelle est ta passion cachée ?",
-    "Quel est ton talent secret ?"
-  ],
-  "Célibataires": [
-    "Es-tu prêt à te marier ?",
-    "Quelle est ta pire expérience de date ?"
-  ],
-  "Famille": [
-    "Qui est le plus drôle dans la famille ?",
-    "Quelle est ta tradition familiale préférée ?"
-  ]
+  "Culture Générale": Array.from({ length: 100 }, (_, i) => `Question Culture Générale #${i + 1}`),
+  "Humour": Array.from({ length: 100 }, (_, i) => `Question Humour #${i + 1}`),
+  "Blagues": Array.from({ length: 100 }, (_, i) => `Question Blague #${i + 1}`),
+  "Défis": Array.from({ length: 100 }, (_, i) => `Défi #${i + 1}`),
+  "Mystère": Array.from({ length: 100 }, (_, i) => `Question Mystère #${i + 1}`),
+  "Dating": Array.from({ length: 100 }, (_, i) => `Question Dating #${i + 1}`),
+  "Se connaître": Array.from({ length: 100 }, (_, i) => `Question Se connaître #${i + 1}`),
+  "Célibataires": Array.from({ length: 100 }, (_, i) => `Question Célibataire #${i + 1}`),
+  "Famille": Array.from({ length: 100 }, (_, i) => `Question Famille #${i + 1}`)
 };
+
+const Gages = Array.from({ length: 100 }, (_, i) => `Gage #${i + 1}`);
 
 let currentCategory = null;
 let players = [];
@@ -52,7 +24,6 @@ const startButton = document.getElementById("startGame");
 const inputs = document.querySelectorAll(".player-inputs input");
 const categoryButtons = document.querySelectorAll("#categories button");
 
-// Sélection interactive des catégories
 categoryButtons.forEach(button => {
   button.addEventListener("click", () => {
     currentCategory = button.dataset.category;
@@ -61,7 +32,6 @@ categoryButtons.forEach(button => {
   });
 });
 
-// Démarrage du jeu
 startButton.addEventListener("click", () => {
   players = Array.from(inputs)
     .map(input => input.value.trim())
@@ -83,18 +53,14 @@ startButton.addEventListener("click", () => {
   showNextQuestion();
 });
 
-// Sélection d'une question aléatoire sans répétition
 function pickRandomQuestion() {
   const availableQuestions = Categories[currentCategory].filter(q => !questionsAsked.includes(q));
-  if (availableQuestions.length === 0) {
-    return null;
-  }
+  if (availableQuestions.length === 0) return null;
   const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
   questionsAsked.push(question);
   return question;
 }
 
-// Affichage de la question suivante
 function showNextQuestion() {
   if (players.every(player => turnCount[player] >= 3)) {
     endGame();
@@ -121,13 +87,10 @@ function showNextQuestion() {
     <button id="fail">❌ Échoué</button>
   `;
 
-  gsap.from("#questionContainer", { opacity: 0, scale: 0.7, duration: 0.5, ease: "back.out(1.7)" });
-
   document.getElementById("success").onclick = () => answerQuestion(player, true);
   document.getElementById("fail").onclick = () => answerQuestion(player, false);
 }
 
-// Gestion de la réponse
 function answerQuestion(player, succeeded) {
   if (succeeded) scores[player] += 1;
   turnCount[player] += 1;
@@ -136,7 +99,6 @@ function answerQuestion(player, succeeded) {
   showNextQuestion();
 }
 
-// Fin du jeu
 function endGame() {
   const minScore = Math.min(...Object.values(scores));
   const losers = players.filter(player => scores[player] === minScore);
@@ -147,34 +109,16 @@ function endGame() {
     <button id="showGage">🎭 Découvrir mon gage</button>
   `;
 
-  gsap.from(".loser-announcement", { scale: 0, opacity: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
-
   document.getElementById("showGage").onclick = showGage;
 }
 
-// Affichage du gage
 function showGage() {
-  const gages = [
-    "Fais 10 pompes ! 💪",
-    "Imite une célébrité pendant 30 secondes. 🎤",
-    "Chante un refrain de ton choix. 🎶",
-    "Danse comme un robot pendant 20 secondes. 🤖"
-  ];
-  const randomGage = gages[Math.floor(Math.random() * gages.length)];
-  
+  const randomGage = Gages[Math.floor(Math.random() * Gages.length)];
+
   questionBox.innerHTML = `
     <div class="gage">${randomGage}</div>
     <button id="replay">🔄 Rejouer</button>
   `;
 
-  gsap.from(".gage", { rotationX: -90, duration: 1, ease: "bounce.out" });
-
   document.getElementById("replay").onclick = () => location.reload();
 }
-
-// Permet d'utiliser la touche Entrée pour passer à la question suivante
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Enter" && questionBox.style.display === "block") {
-    showNextQuestion();
-  }
-});
