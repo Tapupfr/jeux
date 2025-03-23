@@ -4,39 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Tap Up 🎮</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="./style.css" />
 </head>
 <body>
   <div class="container">
-    <img src="assets/logo.png" alt="Tap Up Logo" class="logo" />
+    <img src="./assets/logo.png" alt="Tap Up Logo" class="logo" />
     <h1>Bienvenue sur Tap Up 🎮</h1>
-    <p>Le jeu interactif ultime pour les soirées en bar/resto</p>
+    <p class="intro">Le jeu interactif ultime pour les soirées en bar/resto</p>
 
     <h2>🎯 Sélectionne une catégorie :</h2>
-    <div class="categories">
-      <button>🧠 Culture Générale</button>
-      <button>😂 Humour</button>
-      <button>🤣 Blagues</button>
-      <button>🔥 Défis</button>
-      <button>🎭 Mystère</button>
-      <button>💘 Dating</button>
-      <button>🤝 Se connaître</button>
-      <button>💃 Célibataires</button>
+    <div id="categories" class="category-list">
+      <button data-category="Culture Générale">📚 Culture Générale</button>
+      <button data-category="Humour">😂 Humour</button>
+      <button data-category="Blagues">🍑 Blagues</button>
+      <button data-category="Défis">🔥 Défis</button>
+      <button data-category="Mystère">🎭 Mystère</button>
+      <button data-category="Dating">💘 Dating</button>
+      <button data-category="Se connaître">🧠 Se connaître</button>
+      <button data-category="Célibataires">💋 Célibataires</button>
     </div>
 
-    <h2>👥 Entrez les prénoms des joueurs :</h2>
-    <div id="players">
+    <h2>👯 Entrez les prénoms des joueurs :</h2>
+    <div id="players" class="players">
       <input type="text" placeholder="Joueur 1" />
       <input type="text" placeholder="Joueur 2" />
-      <input type="text" placeholder="Joueur 3" />
-      <input type="text" placeholder="Joueur 4" />
-      <input type="text" placeholder="Joueur 5" />
-      <input type="text" placeholder="Joueur 6" />
+    </div>
+    <button id="add-player">➕ Ajouter un joueur</button>
+    <button id="start">🎲 Démarrer la partie</button>
+
+    <div id="question-container" class="hidden">
+      <p id="question"></p>
+      <button id="next">➡️ Question suivante</button>
     </div>
 
-    <button id="start">🚀 Démarrer la partie</button>
+    <div id="loser-gage" class="hidden">
+      <h2 id="loser-message"></h2>
+      <button id="show-gage">🎯 Afficher le gage</button>
+      <p id="gage-text" class="hidden"></p>
+    </div>
   </div>
 
-  <script src="script.js"></script>
+  <script type="module" src="./assets/script.js"></script>
 </body>
 </html>
