@@ -1,64 +1,58 @@
-// script.js
-
 const Categories = {
   "Culture Générale": [
     "Quel est le plus grand océan du monde ?",
     "Combien de pays y a-t-il dans l'Union européenne ?",
     "Quel pays a pour capitale Canberra ?",
-    ...Array.from({ length: 97 }, (_, i) => `Question Culture Générale #${i + 4}`)
+    "Quelle planète est surnommée la planète rouge ?"
   ],
   "Humour": [
     "Imite un animal jusqu'à ce qu'on devine lequel.",
     "Fais semblant de rire comme un super-vilain.",
-    ...Array.from({ length: 98 }, (_, i) => `Question Humour #${i + 3}`)
+    "Imite ton voisin pendant 10 secondes."
   ],
   "Blagues": [
-    "Pourquoi les plongeurs plongent-ils toujours en arrière et jamais en avant ?",
-    "Quel est le comble pour un jardinier ?",
-    ...Array.from({ length: 98 }, (_, i) => `Question Blague #${i + 3}`)
+    "Pourquoi les plongeurs plongent-ils en arrière ?",
+    "Quel est le comble pour un jardinier ?"
   ],
   "Défis": [
     "Danse sans musique pendant 20 secondes.",
-    "Chante l'alphabet à l'envers.",
-    ...Array.from({ length: 98 }, (_, i) => `Défi #${i + 3}`)
+    "Chante l'alphabet à l'envers."
   ],
   "Mystère": [
     "Quel est ton rêve le plus secret ?",
-    "Quel est ton secret de cuisine ?",
-    ...Array.from({ length: 98 }, (_, i) => `Question Mystère #${i + 3}`)
+    "Quel est ton secret en cuisine ?"
   ],
   "Dating": [
     "Quelle est ta date idéale ?",
-    "As-tu déjà eu un coup de foudre ?",
-    ...Array.from({ length: 98 }, (_, i) => `Question Dating #${i + 3}`)
+    "As-tu déjà eu un coup de foudre ?"
   ],
   "Se connaître": [
     "Quelle est ta passion cachée ?",
-    "Quel est ton talent secret ?",
-    ...Array.from({ length: 98 }, (_, i) => `Question Se connaître #${i + 3}`)
+    "Quel est ton talent secret ?"
   ],
   "Célibataires": [
     "Es-tu prêt à te marier ?",
-    "Quelle est ta pire expérience de date ?",
-    ...Array.from({ length: 98 }, (_, i) => `Question Célibataire #${i + 3}`)
+    "Quelle est ta pire expérience de date ?"
   ],
   "Famille": [
     "Qui est le plus drôle dans la famille ?",
-    "Quelle est ta tradition familiale préférée ?",
-    ...Array.from({ length: 98 }, (_, i) => `Question Famille #${i + 3}`)
+    "Quelle est ta tradition familiale préférée ?"
   ]
 };
 
 let currentCategory = null;
 let players = [];
+let scores = {};
+let questionsAsked = [];
 let currentPlayerIndex = 0;
-let questionsAsked = 0;
+let turnCount = {};
 
 const questionBox = document.getElementById("questionContainer");
 const startButton = document.getElementById("startGame");
 const inputs = document.querySelectorAll(".player-inputs input");
 const categoryButtons = document.querySelectorAll("#categories button");
 
+// Sélection interactive des catégories
 categoryButtons.forEach(button => {
   button.addEventListener("click", () => {
     currentCategory = button.dataset.category;
@@ -67,31 +61,118 @@ categoryButtons.forEach(button => {
   });
 });
 
+// Démarrage du jeu
 startButton.addEventListener("click", () => {
-  players = Array.from(inputs).map(input => input.value).filter(name => name.trim() !== "");
+  players = Array.from(inputs)
+    .map(input => input.value.trim())
+    .filter(name => name !== "");
+
   if (!currentCategory || players.length === 0) {
     alert("Choisissez une catégorie et entrez au moins un joueur.");
     return;
   }
-  questionsAsked = 0;
+
+  players.forEach(player => {
+    scores[player] = 0;
+    turnCount[player] = 0;
+  });
+
+  questionsAsked = [];
   currentPlayerIndex = 0;
   questionBox.style.display = "block";
   showNextQuestion();
 });
 
-function showNextQuestion() {
-  if (questionsAsked >= players.length * 3) {
-    questionBox.innerHTML = `Fin de partie 🎉<br>Merci d'avoir joué !`;
-    return;
+// Sélection d'une question aléatoire sans répétition
+function pickRandomQuestion() {
+  const availableQuestions = Categories[currentCategory].filter(q => !questionsAsked.includes(q));
+  if (availableQuestions.length === 0) {
+    return null;
   }
-  const player = players[currentPlayerIndex];
-  const questions = Categories[currentCategory];
-  const question = questions[Math.floor(Math.random() * questions.length)];
-  questionBox.innerHTML = `<strong>${player} :</strong> ${question}`;
-  currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-  questionsAsked++;
+  const question = availableQuestions[Math.floor(Math.random() * availableQuestions.length)];
+  questionsAsked.push(question);
+  return question;
 }
 
+// Affichage de la question suivante
+function showNextQuestion() {
+  if (players.every(player => turnCount[player] >= 3)) {
+    endGame();
+    return;
+  }
+
+  const player = players[currentPlayerIndex];
+  if (turnCount[player] >= 3) {
+    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+    showNextQuestion();
+    return;
+  }
+
+  const question = pickRandomQuestion();
+  if (!question) {
+    questionBox.innerHTML = "Plus de questions disponibles dans cette catégorie !";
+    return;
+  }
+
+  questionBox.innerHTML = `
+    <div class="player-highlight">🔥 À toi de jouer, ${player} !</div>
+    <div class="question-text">${question}</div>
+    <button id="success">✅ Réussi</button>
+    <button id="fail">❌ Échoué</button>
+  `;
+
+  gsap.from("#questionContainer", { opacity: 0, scale: 0.7, duration: 0.5, ease: "back.out(1.7)" });
+
+  document.getElementById("success").onclick = () => answerQuestion(player, true);
+  document.getElementById("fail").onclick = () => answerQuestion(player, false);
+}
+
+// Gestion de la réponse
+function answerQuestion(player, succeeded) {
+  if (succeeded) scores[player] += 1;
+  turnCount[player] += 1;
+
+  currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+  showNextQuestion();
+}
+
+// Fin du jeu
+function endGame() {
+  const minScore = Math.min(...Object.values(scores));
+  const losers = players.filter(player => scores[player] === minScore);
+  const loser = losers[Math.floor(Math.random() * losers.length)];
+
+  questionBox.innerHTML = `
+    <div class="loser-announcement">😅 Dommage ${loser}, tu es notre grand perdant !</div>
+    <button id="showGage">🎭 Découvrir mon gage</button>
+  `;
+
+  gsap.from(".loser-announcement", { scale: 0, opacity: 0, duration: 1, ease: "elastic.out(1, 0.3)" });
+
+  document.getElementById("showGage").onclick = showGage;
+}
+
+// Affichage du gage
+function showGage() {
+  const gages = [
+    "Fais 10 pompes ! 💪",
+    "Imite une célébrité pendant 30 secondes. 🎤",
+    "Chante un refrain de ton choix. 🎶",
+    "Danse comme un robot pendant 20 secondes. 🤖"
+  ];
+  const randomGage = gages[Math.floor(Math.random() * gages.length)];
+  
+  questionBox.innerHTML = `
+    <div class="gage">${randomGage}</div>
+    <button id="replay">🔄 Rejouer</button>
+  `;
+
+  gsap.from(".gage", { rotationX: -90, duration: 1, ease: "bounce.out" });
+
+  document.getElementById("replay").onclick = () => location.reload();
+}
+
+// Permet d'utiliser la touche Entrée pour passer à la question suivante
 document.addEventListener("keydown", (e) => {
   if (e.key === "Enter" && questionBox.style.display === "block") {
     showNextQuestion();
