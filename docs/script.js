@@ -33,7 +33,7 @@ categoryButtons.forEach(button => {
 });
 
 startButton.addEventListener("click", () => {
-  players = Array.from(inputs)
+  players = Array.from(document.querySelectorAll(".player-inputs input"))
     .map(input => input.value.trim())
     .filter(name => name !== "");
 
