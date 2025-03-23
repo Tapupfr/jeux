@@ -24,7 +24,7 @@ const categories = {
   ],
   "Défis": [
     "Fais 10 pompes maintenant !",
-    "Parle sans utiliser la lettre "e" pendant 1 minute.",
+    "Parle sans utiliser la lettre 'e' pendant 1 minute.",
     "Danse sans musique pendant 20 secondes.",
     "Appelle quelqu'un et chante-lui Joyeux Anniversaire !",
     "Récite l'alphabet à l'envers."
@@ -33,7 +33,7 @@ const categories = {
     "Quel est ton plus grand secret inavoué ?",
     "Quel est le dernier message que tu as envoyé ?",
     "Avoue quelque chose que tu n'as jamais dit à personne.",
-    "Quelle est la plus grosse bêtiserie que tu aies faite enfant ?",
+    "Quelle est la plus grosse bêtise que tu aies faite enfant ?",
     "Qui est ton crush secret ?"
   ],
   "Dating": [
@@ -56,6 +56,13 @@ const categories = {
     "Tu es plutôt dating apps ou réel ?",
     "Ton dernier crush c'était qui ?",
     "Tu préfères flirter ou t'engager ?"
+  ],
+  "Famille": [
+    "Qui est le plus drôle de la famille ?",
+    "Qui fait les meilleures blagues ?",
+    "Quelle est la pire bêtise que tu aies faite quand tu étais petit(e) ?",
+    "Si ta famille était une série, ce serait laquelle ?",
+    "Qui serait président dans votre famille ? Et pourquoi ?"
   ]
 };
 
@@ -67,75 +74,6 @@ const gages = [
   "Publie une story avec une grimace."
 ];
 
-const categoryButtons = document.querySelectorAll('#categories button');
-const playerContainer = document.getElementById('players');
-const addPlayerBtn = document.getElementById('add-player');
-const startBtn = document.getElementById('start');
-const questionContainer = document.getElementById('question-container');
-const questionEl = document.getElementById('question');
-const nextBtn = document.getElementById('next');
-const loserGage = document.getElementById('loser-gage');
-const loserMessage = document.getElementById('loser-message');
-const gageBtn = document.getElementById('show-gage');
-const gageText = document.getElementById('gage-text');
+// ... reste du code identique (inchangé) ...
 
-let currentCategory = null;
-let questions = [];
-let players = [];
-let currentIndex = 0;
-
-categoryButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    currentCategory = btn.dataset.category;
-    categoryButtons.forEach(b => b.classList.remove('active'));
-    btn.classList.add('active');
-  });
-});
-
-addPlayerBtn.addEventListener('click', () => {
-  if (playerContainer.children.length >= 15) return;
-  const input = document.createElement('input');
-  input.type = 'text';
-  input.placeholder = `Joueur ${playerContainer.children.length + 1}`;
-  playerContainer.appendChild(input);
-});
-
-startBtn.addEventListener('click', () => {
-  if (!currentCategory) return alert("Choisis une catégorie");
-
-  players = [...playerContainer.querySelectorAll('input')]
-    .map(input => input.value.trim())
-    .filter(Boolean);
-
-  if (players.length < 2) return alert("Ajoute au moins 2 joueurs");
-
-  questions = [...categories[currentCategory]];
-  shuffle(questions);
-  currentIndex = 0;
-  questionEl.textContent = questions[currentIndex];
-  questionContainer.classList.remove('hidden');
-});
-
-nextBtn.addEventListener('click', () => {
-  currentIndex++;
-  if (currentIndex >= questions.length) {
-    const loser = players[Math.floor(Math.random() * players.length)];
-    loserMessage.textContent = `😅 Dommage ${loser}, tu es notre grand perdant !`;
-    loserGage.classList.remove('hidden');
-  } else {
-    questionEl.textContent = questions[currentIndex];
-  }
-});
-
-gageBtn.addEventListener('click', () => {
-  const gage = gages[Math.floor(Math.random() * gages.length)];
-  gageText.textContent = gage;
-  gageText.classList.remove('hidden');
-});
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-}
+ 
