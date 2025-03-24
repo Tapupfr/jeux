@@ -1,146 +1,124 @@
-#scoresContainer {
-  text-align: center;
-  margin-top: 1rem;
-  font-size: 1.2rem;
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-#questionContainer {
-  margin-top: 2rem;
-  background: rgba(255, 255, 255, 0.95);
-  color: #222;
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #a0c4ff, #ffc6ff);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   padding: 20px;
-  border-radius: 16px;
-  box-shadow: 0 0 20px #ffffff44;
   text-align: center;
-  max-width: 600px;
-  width: 90%;
-  animation: fadeIn 0.6s ease-out;
 }
 
-#questionContainer p {
-  margin: 10px 0;
-  line-height: 1.4;
+header {
+  margin-bottom: 2rem;
 }
 
-.question-text {
-  font-size: 1.2rem;
-  font-weight: 500;
+.logo {
+  width: 140px;
+  margin-bottom: 10px;
 }
 
-.end-title {
-  font-size: 1.5rem;
+h1, h2 {
+  margin-bottom: 10px;
+  text-shadow: 0 0 10px #fff;
+}
+
+.intro {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 2rem;
+}
+
+.category-grid button {
+  padding: 10px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #d0bfff, #ffafcc);
   color: #000;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  transition: 0.3s;
 }
 
-.end-sub {
-  font-size: 1.1rem;
-  color: #333;
-  margin-bottom: 1rem;
-}
-
-.gage-text {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin: 10px 0;
-}
-
-button.success-btn,
-button.fail-btn {
-  padding: 10px 18px;
-  margin: 8px 10px;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: bold;
-  border: none;
-  cursor: pointer;
-}
-
-button.success-btn {
-  background-color: #b9fbc0;
-  color: #111;
-}
-
-button.fail-btn {
-  background-color: #ffadad;
-  color: #111;
-}
-
-button.success-btn:hover,
-button.fail-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 8px #fff;
-}
-#questionContainer {
-  margin-top: 2rem;
-  padding: 24px;
-  background: rgba(255, 255, 255, 0.95);
-  border-radius: 16px;
-  text-align: center;
-  box-shadow: 0 0 15px #ffffff66;
-  max-width: 600px;
-  width: 90%;
-  color: #222;
-}
-
-#questionContainer p {
-  font-size: 1.1rem;
-  margin: 12px 0;
-  line-height: 1.5;
-}
-
-.question-text {
-  font-size: 1.3rem;
-  font-weight: 600;
-  margin-top: 10px;
-  color: #111;
-}
-
-.end-title {
-  font-size: 1.4rem;
-  font-weight: bold;
-  color: #222;
-}
-
-.end-sub {
-  font-size: 1.1rem;
-  margin-bottom: 1rem;
-  color: #444;
-}
-
-.gage-text {
-  font-size: 1.3rem;
-  font-weight: bold;
-  margin: 10px 0;
-  color: #111;
-}
-
-button.success-btn,
-button.fail-btn {
-  padding: 12px 20px;
-  font-size: 1rem;
-  font-weight: bold;
-  border-radius: 10px;
-  margin: 8px 10px;
-  border: none;
-  cursor: pointer;
-  transition: 0.2s ease;
-}
-
-button.success-btn {
-  background-color: #b9fbc0;
-  color: #111;
-}
-
-button.fail-btn {
-  background-color: #ffadad;
-  color: #111;
-}
-
-button.success-btn:hover,
-button.fail-btn:hover {
-  transform: scale(1.05);
+.category-grid .selected {
+  background: #ffafcc;
   box-shadow: 0 0 10px #fff;
 }
 
+.player-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 1rem;
+}
+
+.player-inputs input {
+  padding: 10px;
+  border-radius: 8px;
+  border: none;
+  width: 120px;
+}
+
+button {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#addPlayer,
+#startGame {
+  margin-top: 10px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+}
+
+#startGame {
+  background: #b9fbc0;
+}
+
+#questionContainer {
+  margin-top: 20px;
+  background: #fff;
+  color: #111;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 0 10px #ffffff55;
+  max-width: 500px;
+  width: 90%;
+}
+
+#questionContainer p {
+  margin: 10px 0;
+}
+
+button.success-btn {
+  background: #a8f0c6;
+}
+
+button.fail-btn {
+  background: #ffb3b3;
+}
+
+footer {
+  margin-top: auto;
+  padding: 20px;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
