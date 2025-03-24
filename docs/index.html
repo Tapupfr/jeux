@@ -1,14 +1,15 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tap Up 🎮</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <img src="actif/logo.png" alt="Logo Tap Up" class="logo">
+    <img src="actif/logo.png" alt="Logo Tap Up" class="logo" />
     <h1>Bienvenue sur Tap Up 🎮</h1>
     <p class="intro">Le jeu interactif ultime pour les soirées en bar/resto</p>
   </header>
@@ -37,22 +38,7 @@
     <button id="startGame">🎲 Démarrer la partie</button>
   </div>
 
-  <footer>
-    © 2025 Tap Up - Tous droits réservés
-  </footer>
-
-  <script>
-    document.getElementById('addPlayer').addEventListener('click', () => {
-      const inputs = document.querySelectorAll('#playerInputs input');
-      if (inputs.length < 15) {
-        const newInput = document.createElement('input');
-        newInput.placeholder = `Joueur ${inputs.length + 1}`;
-        document.getElementById('playerInputs').appendChild(newInput);
-      } else {
-        alert('Maximum 15 joueurs atteint !');
-      }
-    });
-  </script>
+  <footer>© 2025 Tap Up - Tous droits réservés</footer>
 
   <script src="script.js"></script>
 </body>
