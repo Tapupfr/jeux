@@ -19,98 +19,94 @@
     © 2025 Tap Up - Tous droits réservés
   </footer>
 
-  <!-- Ligne essentielle pour charger ton script -->
-  <script src="script.js"></script>
-<script>
-const Categories = {
-  "Culture Générale": Array.from({ length: 10 }, (_, i) => `Question Culture Générale #${i + 1}`),
-  "Humour": Array.from({ length: 10 }, (_, i) => `Question Humour #${i + 1}`),
-  "Blagues": Array.from({ length: 10 }, (_, i) => `Question Blague #${i + 1}`),
-  "Défis": Array.from({ length: 10 }, (_, i) => `Défi #${i + 1}`),
-  "Mystère": Array.from({ length: 10 }, (_, i) => `Question Mystère #${i + 1}`),
-  "Dating": Array.from({ length: 10 }, (_, i) => `Question Dating #${i + 1}`),
-  "Se connaître": Array.from({ length: 10 }, (_, i) => `Question Se connaître #${i + 1}`),
-  "Célibataires": Array.from({ length: 10 }, (_, i) => `Question Célibataire #${i + 1}`),
-  "Famille": Array.from({ length: 10 }, (_, i) => `Question Famille #${i + 1}`)
-};
+  <script>
+    const Categories = {
+      "Culture Générale": Array.from({ length: 10 }, (_, i) => `Question Culture Générale #${i + 1}`),
+      "Humour": Array.from({ length: 10 }, (_, i) => `Question Humour #${i + 1}`),
+      "Blagues": Array.from({ length: 10 }, (_, i) => `Question Blague #${i + 1}`),
+      "Défis": Array.from({ length: 10 }, (_, i) => `Défi #${i + 1}`),
+      "Mystère": Array.from({ length: 10 }, (_, i) => `Question Mystère #${i + 1}`),
+      "Dating": Array.from({ length: 10 }, (_, i) => `Question Dating #${i + 1}`),
+      "Se connaître": Array.from({ length: 10 }, (_, i) => `Question Se connaître #${i + 1}`),
+      "Célibataires": Array.from({ length: 10 }, (_, i) => `Question Célibataire #${i + 1}`),
+      "Famille": Array.from({ length: 10 }, (_, i) => `Question Famille #${i + 1}`)
+    };
 
-let players = JSON.parse(localStorage.getItem('players') || "[]");
-let category = localStorage.getItem('category');
-let scores = {}, questionsAsked = [], currentPlayerIndex = 0, turnCount = {};
+    const Gages = Array.from({ length: 10 }, (_, i) => `Gage #${i + 1}`);
 
-players.forEach(player => {
-  scores[player] = 0;
-  turnCount[player] = 0;
-});
+    let players = JSON.parse(localStorage.getItem('players'));
+    let category = localStorage.getItem('category');
+    let scores = {};
+    let turnCount = {};
+    let questionsAsked = [];
+    let currentPlayerIndex = 0;
 
-function pickRandomQuestion() {
-  const available = Categories[category].filter(q => !questionsAsked.includes(q));
-  if (available.length === 0) return null;
-  const question = available[Math.floor(Math.random() * available.length)];
-  questionsAsked.push(question);
-  return question;
-}
+    players.forEach(p => { scores[p] = 0; turnCount[p] = 0; });
 
-function updateScores() {
-  const html = players.map(p => `<p>${p} : ${scores[p]}</p>`).join("");
-  document.getElementById("scoresContainer").innerHTML = `<h3>Scores actuels :</h3>${html}`;
-}
+    function updateScores() {
+      document.getElementById('scoresContainer').innerHTML =
+        `<h3>Scores actuels :</h3>` +
+        players.map(p => `<p>${p} : ${scores[p]}</p>`).join('');
+    }
 
-function nextQuestion() {
-  if (players.every(p => turnCount[p] >= 3)) {
-    endGame(); return;
-  }
+    function nextQuestion() {
+      if (players.every(p => turnCount[p] >= 3)) {
+        endGame();
+        return;
+      }
 
-  let player = players[currentPlayerIndex];
-  if (turnCount[player] >= 3) {
-    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-    nextQuestion(); return;
-  }
+      let player = players[currentPlayerIndex];
+      if (turnCount[player] >= 3) {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+        nextQuestion();
+        return;
+      }
 
-  const question = pickRandomQuestion();
-  if (!question) {
-    document.getElementById("questionContainer").innerHTML = "Plus de questions disponibles !";
-    return;
-  }
+      let questionList = Categories[category].filter(q => !questionsAsked.includes(q));
+      if (questionList.length === 0) {
+        document.getElementById('questionContainer').innerHTML = "Plus de questions disponibles!";
+        return;
+      }
 
-  document.getElementById("questionContainer").innerHTML = `
-    <div>🔥 À toi de jouer, ${player} !</div>
-    <p>${question}</p>
-    <button onclick="answer(true)">✅ Réussi</button>
-    <button onclick="answer(false)">❌ Échoué</button>
-  `;
-  updateScores();
-}
+      let question = questionList[Math.floor(Math.random() * questionList.length)];
+      questionsAsked.push(question);
 
-function answer(success) {
-  let player = players[currentPlayerIndex];
-  if (success) scores[player]++;
-  turnCount[player]++;
-  currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-  nextQuestion();
-}
+      document.getElementById('questionContainer').innerHTML = `
+        <p>🔥 À toi de jouer, <strong>${player}</strong> !</p>
+        <p>${question}</p>
+        <button onclick="answer(true)">✅ Réussi</button>
+        <button onclick="answer(false)">❌ Échoué</button>`;
+      
+      updateScores();
+    }
 
-function endGame() {
-  let minScore = Math.min(...Object.values(scores));
-  let losers = players.filter(p => scores[p] === minScore);
-  let loser = losers[Math.floor(Math.random() * losers.length)];
-  document.getElementById("questionContainer").innerHTML = `
-    <div>😅 Dommage ${loser}, tu es notre grand perdant !</div>
-    <button onclick="showGage()">🎭 Découvrir mon gage</button>`;
-  updateScores();
-}
+    function answer(success) {
+      let player = players[currentPlayerIndex];
+      if (success) scores[player]++;
+      turnCount[player]++;
+      currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+      nextQuestion();
+    }
 
-function showGage() {
-  const Gages = Array.from({ length: 10 }, (_, i) => `Gage #${i + 1}`);
-  let gage = Gages[Math.floor(Math.random() * Gages.length)];
-  document.getElementById("questionContainer").innerHTML = `
-    <div>${gage}</div>
-    <button onclick="window.close()">🔄 Fermer</button>`;
-}
+    function endGame() {
+      let min = Math.min(...Object.values(scores));
+      let losers = players.filter(p => scores[p] === min);
+      let loser = losers[Math.floor(Math.random() * losers.length)];
 
-window.onload = nextQuestion;
-</script>
+      document.getElementById('questionContainer').innerHTML = `
+        <p>😅 Dommage ${loser}, tu as perdu !</p>
+        <button onclick="showGage()">🎭 Découvrir mon gage</button>`;
+      updateScores();
+    }
+
+    function showGage() {
+      let gage = Gages[Math.floor(Math.random() * Gages.length)];
+      document.getElementById('questionContainer').innerHTML = `
+        <p>👉 ${gage}</p>
+        <button onclick="window.close()">🔄 Fermer</button>`;
+    }
+
+    window.onload = nextQuestion;
+  </script>
 </body>
 </html>
-
-
