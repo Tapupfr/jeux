@@ -1,122 +1,202 @@
-const players = JSON.parse(localStorage.getItem("players"));
-const category = localStorage.getItem("category");
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
 
-const Questions = {
-  "Culture Générale": [
-    "Quel est le plus long fleuve du monde ?",
-    "En quelle année a eu lieu la Révolution française ?",
-    "Quel pays a inventé les Jeux Olympiques ?",
-    "Quelle est la capitale de l’Australie ?",
-    "Combien y a-t-il de continents ?",
-    "Qui a peint La Joconde ?",
-    "Quel est l’élément chimique de symbole O ?",
-    "Qui a écrit 'Les Misérables' ?",
-    "Dans quel pays se trouve la ville de Marrakech ?",
-    "Combien de planètes composent le système solaire ?"
-  ],
-  "Humour": [
-    "Raconte ta meilleure blague !",
-    "Fais une imitation drôle de ton voisin.",
-    "Fais un rire démoniaque pendant 5 secondes.",
-    "Invente un nouveau mot et donne sa définition.",
-    "Fais une voix de bébé pendant une phrase.",
-    "Fais une blague sur les légumes.",
-    "Raconte une blague nulle mais drôle.",
-    "Dis 3 jeux de mots pourris.",
-    "Imite quelqu’un qui perd à Tap Up.",
-    "Fais une pub bidon pour un produit imaginaire."
-  ],
-  // ... (renseigne les autres catégories ici)
-};
-
-const Gages = [
-  "Fais 10 squats pendant qu’on te regarde.",
-  "Chante une chanson au hasard devant tout le monde.",
-  "Fais une déclaration d'amour à une chaise.",
-  "Répète 'Tap Up est le meilleur' 5 fois avec passion.",
-  "Fais une pose de mannequin pendant 15 secondes.",
-  "Danse sans musique pendant 20 secondes.",
-  "Imite une célébrité jusqu'à ce qu’on devine.",
-  "Dis une phrase romantique en criant.",
-  "Fais un animal en mime.",
-  "Tourne sur toi-même et dis l’alphabet à l’envers."
-];
-
-let scores = {};
-let turnCount = {};
-let currentPlayerIndex = 0;
-let questionsAsked = [];
-
-players.forEach(p => {
-  scores[p] = 0;
-  turnCount[p] = 0;
-});
-
-function updateScores() {
-  const scoreDiv = document.getElementById("scoresContainer");
-  scoreDiv.innerHTML = `<h3>Scores actuels :</h3>`;
-  players.forEach(p => {
-    scoreDiv.innerHTML += `<p>${p} : ${scores[p]}</p>`;
-  });
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-function nextQuestion() {
-  if (players.every(p => turnCount[p] >= 3)) return endGame();
+body {
+  font-family: 'Orbitron', sans-serif;
+  background: linear-gradient(135deg, #a0c4ff, #ffc6ff);
+  color: #fff;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
 
-  let player = players[currentPlayerIndex];
-  if (turnCount[player] >= 3) {
-    currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-    return nextQuestion();
+header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 1s ease-out;
+}
+
+.logo {
+  width: 160px;
+  height: auto;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 5px #ffffffaa);
+}
+
+h1 {
+  font-size: 2.2rem;
+  text-shadow: 0 0 10px #ffffff;
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin: 1rem 0;
+}
+
+.category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 2rem;
+}
+
+.category-grid button {
+  padding: 12px;
+  border: none;
+  border-radius: 12px;
+  background: linear-gradient(to right, #d0bfff, #ffafcc);
+  color: #000;
+  font-weight: bold;
+  transition: 0.3s ease;
+  box-shadow: 0 0 5px #ffffff88;
+  cursor: pointer;
+}
+
+.category-grid .selected {
+  background: #ffc8dd;
+  box-shadow: 0 0 15px #fff;
+  transform: scale(1.08);
+}
+
+.player-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 1rem;
+  max-width: 600px;
+}
+
+.player-inputs input {
+  flex: 1 1 40%;
+  min-width: 120px;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  font-size: 1rem;
+}
+
+button {
+  font-family: 'Orbitron', sans-serif;
+}
+
+#addPlayer,
+#startGame {
+  padding: 12px 20px;
+  margin: 6px;
+  font-size: 1rem;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#addPlayer {
+  background-color: #ffffff;
+  color: #333;
+}
+
+#startGame {
+  background: #ffafcc;
+  color: black;
+}
+
+.success-btn,
+.fail-btn {
+  padding: 12px 20px;
+  margin: 8px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.success-btn {
+  background-color: #b9fbc0;
+  color: #111;
+}
+
+.fail-btn {
+  background-color: #ffadad;
+  color: #111;
+}
+
+.success-btn:hover,
+.fail-btn:hover,
+#addPlayer:hover,
+#startGame:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #fff;
+}
+
+.question-box {
+  margin-top: 30px;
+  padding: 20px;
+  background: white;
+  color: #222;
+  border-radius: 16px;
+  box-shadow: 0 0 20px #fff4;
+  max-width: 500px;
+  text-align: center;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  margin: 10px 0 20px;
+}
+
+.end-title {
+  font-size: 1.5rem;
+  margin-bottom: 12px;
+  color: #fff;
+  text-shadow: 0 0 10px #fff;
+}
+
+.end-sub {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  color: #eee;
+}
+
+.gage-text {
+  font-size: 1.3rem;
+  margin: 10px 0;
+  color: #111;
+  text-align: center;
+}
+
+footer {
+  margin-top: auto;
+  font-size: 0.75rem;
+  color: #fff;
+  text-align: center;
+  opacity: 0.7;
+  padding: 20px 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .category-grid {
+    grid-template-columns: 1fr 1fr;
   }
 
-  let possibleQuestions = Questions[category].filter(q => !questionsAsked.includes(q));
-  if (possibleQuestions.length === 0) return endGame();
-
-  let question = possibleQuestions[Math.floor(Math.random() * possibleQuestions.length)];
-  questionsAsked.push(question);
-
-  const qBox = document.getElementById("questionContainer");
-  qBox.innerHTML = `
-    <p>🔥 À toi de jouer, <strong>${player}</strong> !</p>
-    <p class="question-text">${question}</p>
-    <button class="success-btn" onclick="answer(true)">✅ Réussi</button>
-    <button class="fail-btn" onclick="answer(false)">❌ Échoué</button>
-  `;
-
-  updateScores();
+  .player-inputs input {
+    flex: 1 1 100%;
+  }
 }
-
-function answer(success) {
-  let player = players[currentPlayerIndex];
-  if (success) scores[player]++;
-  turnCount[player]++;
-  currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-  nextQuestion();
-}
-
-function endGame() {
-  let min = Math.min(...Object.values(scores));
-  let losers = players.filter(p => scores[p] === min);
-  let loser = losers[Math.floor(Math.random() * losers.length)];
-  let gage = Gages[Math.floor(Math.random() * Gages.length)];
-
-  const qBox = document.getElementById("questionContainer");
-  qBox.innerHTML = `
-    <p class="end-title">😅 Dommage <strong>${loser}</strong>, tu as perdu !</p>
-    <p class="end-sub">🎭 Clique pour découvrir ton gage :</p>
-    <button class="success-btn" onclick="revealGage('${gage}')">🎁 Découvrir le gage</button>
-  `;
-
-  updateScores();
-}
-
-function revealGage(gage) {
-  const qBox = document.getElementById("questionContainer");
-  qBox.innerHTML = `
-    <p class="gage-text">🎭 Ton gage :</p>
-    <p class="gage-text"><strong>${gage}</strong></p>
-    <button class="fail-btn" onclick="location.href='index.html'">🔁 Rejouer</button>
-  `;
-}
-
-window.onload = nextQuestion;
