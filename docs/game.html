@@ -120,4 +120,96 @@
         "Le membre de ta famille le plus drôle ?",
         "Ton meilleur souvenir en famille ?",
         "Ton plat familial préféré ?",
-        "As-tu
+        "As-tu déjà fait une bêtise en famille ?",
+        "As-tu une tradition familiale ?",
+        "Plutôt team maman ou papa ?",
+        "Le plus bordélique chez toi ?",
+        "Un moment de gêne en famille ?",
+        "Ton surnom familial ?",
+        "Ton rôle dans ta famille ?"
+      ]
+    };
+
+    const Gages = [
+      "Danse comme un robot pendant 10 secondes !",
+      "Parle comme un enfant pendant 2 minutes.",
+      "Fais le tour de la pièce en rampant.",
+      "Fais une déclaration d’amour à une chaise.",
+      "Récite l’alphabet à l’envers en chantant.",
+      "Fais 10 squats pendant qu’on te regarde.",
+      "Crie 'Tap Up est le meilleur jeu !'",
+      "Fais une imitation d’un animal pendant 15 secondes.",
+      "Appelle quelqu’un et chante-lui une chanson.",
+      "Prends une voix grave et parle comme Dark Vador."
+    ];
+
+    const players = JSON.parse(localStorage.getItem("players"));
+    const category = localStorage.getItem("category");
+    const scores = {};
+    const turnCount = {};
+    let currentPlayerIndex = 0;
+    const questionsAsked = [];
+
+    players.forEach(p => {
+      scores[p] = 0;
+      turnCount[p] = 0;
+    });
+
+    function updateScores() {
+      document.getElementById("scoresContainer").innerHTML =
+        `<h3>Scores actuels :</h3>` +
+        players.map(p => `<p>${p} : ${scores[p]}</p>`).join('');
+    }
+
+    function nextQuestion() {
+      if (players.every(p => turnCount[p] >= 3)) return endGame();
+
+      let player = players[currentPlayerIndex];
+      if (turnCount[player] >= 3) {
+        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+        return nextQuestion();
+      }
+
+      let possible = Questions[category].filter(q => !questionsAsked.includes(q));
+      if (possible.length === 0) return;
+
+      let question = possible[Math.floor(Math.random() * possible.length)];
+      questionsAsked.push(question);
+
+      document.getElementById("questionContainer").innerHTML = `
+        <p>🔥 À toi de jouer, <strong>${player}</strong> !</p>
+        <p class="question-text">${question}</p>
+        <button class="success-btn" onclick="answer(true)">✅ Réussi</button>
+        <button class="fail-btn" onclick="answer(false)">❌ Échoué</button>
+      `;
+
+      updateScores();
+    }
+
+    function answer(success) {
+      const player = players[currentPlayerIndex];
+      if (success) scores[player]++;
+      turnCount[player]++;
+      currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+      nextQuestion();
+    }
+
+    function endGame() {
+      let min = Math.min(...Object.values(scores));
+      let losers = players.filter(p => scores[p] === min);
+      let loser = losers[Math.floor(Math.random() * losers.length)];
+      const gage = Gages[Math.floor(Math.random() * Gages.length)];
+
+      document.getElementById("questionContainer").innerHTML = `
+        <p>😅 Dommage <strong>${loser}</strong>, tu as perdu !</p>
+        <p>🎭 Ton gage : <strong>${gage}</strong></p>
+        <button onclick="location.href='index.html'">🔁 Rejouer</button>
+      `;
+
+      updateScores();
+    }
+
+    window.onload = nextQuestion;
+  </script>
+</body>
+</html>
