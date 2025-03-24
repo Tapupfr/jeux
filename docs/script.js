@@ -48,7 +48,8 @@ startButton.addEventListener("click", () => {
   questionsAsked = [];
   currentPlayerIndex = 0;
 
-  const gameWindow = window.open("game.html", "GameWindow", "width=600,height=700");
+  const gameWindow = window.open("game.html", "GameWindow", "width=800,height=800");
+
 
   gameWindow.onload = function() {
     updateScores(gameWindow);
