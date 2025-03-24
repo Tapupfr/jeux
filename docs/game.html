@@ -1,112 +1,123 @@
+<!-- game.html -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tap Up 🎮 - Partie en cours</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tap Up 🎮 - Partie</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <header>
-    <img src="actif/logo.png" alt="Logo Tap Up" class="logo">
+    <img src="actif/logo.png" alt="Logo Tap Up" class="logo" />
     <h1>Partie en cours 🎲</h1>
   </header>
 
   <div id="scoresContainer"></div>
-  <div id="questionContainer"></div>
+  <div id="questionContainer" class="question-box"></div>
 
-  <footer>
-    © 2025 Tap Up - Tous droits réservés
-  </footer>
+  <footer>© 2025 Tap Up - Tous droits réservés</footer>
 
   <script>
-    const Categories = {
-      "Culture Générale": Array.from({ length: 10 }, (_, i) => `Question Culture Générale #${i + 1}`),
-      "Humour": Array.from({ length: 10 }, (_, i) => `Question Humour #${i + 1}`),
-      "Blagues": Array.from({ length: 10 }, (_, i) => `Question Blague #${i + 1}`),
-      "Défis": Array.from({ length: 10 }, (_, i) => `Défi #${i + 1}`),
-      "Mystère": Array.from({ length: 10 }, (_, i) => `Question Mystère #${i + 1}`),
-      "Dating": Array.from({ length: 10 }, (_, i) => `Question Dating #${i + 1}`),
-      "Se connaître": Array.from({ length: 10 }, (_, i) => `Question Se connaître #${i + 1}`),
-      "Célibataires": Array.from({ length: 10 }, (_, i) => `Question Célibataire #${i + 1}`),
-      "Famille": Array.from({ length: 10 }, (_, i) => `Question Famille #${i + 1}`)
-    };
-
-    const Gages = Array.from({ length: 10 }, (_, i) => `Gage #${i + 1}`);
-
-    let players = JSON.parse(localStorage.getItem('players'));
-    let category = localStorage.getItem('category');
-    let scores = {};
-    let turnCount = {};
-    let questionsAsked = [];
-    let currentPlayerIndex = 0;
-
-    players.forEach(p => { scores[p] = 0; turnCount[p] = 0; });
-
-    function updateScores() {
-      document.getElementById('scoresContainer').innerHTML =
-        `<h3>Scores actuels :</h3>` +
-        players.map(p => `<p>${p} : ${scores[p]}</p>`).join('');
-    }
-
-    function nextQuestion() {
-      if (players.every(p => turnCount[p] >= 3)) {
-        endGame();
-        return;
-      }
-
-      let player = players[currentPlayerIndex];
-      if (turnCount[player] >= 3) {
-        currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-        nextQuestion();
-        return;
-      }
-
-      let questionList = Categories[category].filter(q => !questionsAsked.includes(q));
-      if (questionList.length === 0) {
-        document.getElementById('questionContainer').innerHTML = "Plus de questions disponibles!";
-        return;
-      }
-
-      let question = questionList[Math.floor(Math.random() * questionList.length)];
-      questionsAsked.push(question);
-
-      document.getElementById('questionContainer').innerHTML = `
-        <p>🔥 À toi de jouer, <strong>${player}</strong> !</p>
-        <p>${question}</p>
-        <button onclick="answer(true)">✅ Réussi</button>
-        <button onclick="answer(false)">❌ Échoué</button>`;
-      
-      updateScores();
-    }
-
-    function answer(success) {
-      let player = players[currentPlayerIndex];
-      if (success) scores[player]++;
-      turnCount[player]++;
-      currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
-      nextQuestion();
-    }
-
-    function endGame() {
-      let min = Math.min(...Object.values(scores));
-      let losers = players.filter(p => scores[p] === min);
-      let loser = losers[Math.floor(Math.random() * losers.length)];
-
-      document.getElementById('questionContainer').innerHTML = `
-        <p>😅 Dommage ${loser}, tu as perdu !</p>
-        <button onclick="showGage()">🎭 Découvrir mon gage</button>`;
-      updateScores();
-    }
-
-    function showGage() {
-      let gage = Gages[Math.floor(Math.random() * Gages.length)];
-      document.getElementById('questionContainer').innerHTML = `
-        <p>👉 ${gage}</p>
-        <button onclick="window.close()">🔄 Fermer</button>`;
-    }
-
-    window.onload = nextQuestion;
-  </script>
-</body>
-</html>
+    const Questions = {
+      "Culture Générale": [
+        "Quel est le plus long fleuve du monde ?",
+        "En quelle année a eu lieu la Révolution française ?",
+        "Quel pays a inventé les Jeux Olympiques ?",
+        "Quelle est la capitale de l’Australie ?",
+        "Combien y a-t-il de continents ?",
+        "Qui a peint La Joconde ?",
+        "Quel est l’élément chimique de symbole O ?",
+        "Qui a écrit 'Les Misérables' ?",
+        "Dans quel pays se trouve la ville de Marrakech ?",
+        "Combien de planètes composent le système solaire ?"
+      ],
+      "Humour": [
+        "Raconte ta meilleure blague !",
+        "Fais une imitation drôle de ton voisin.",
+        "Fais un rire démoniaque pendant 5 secondes.",
+        "Invente un nouveau mot et donne sa définition.",
+        "Fais une voix de bébé pendant une phrase.",
+        "Fais une blague sur les légumes.",
+        "Raconte une blague nulle mais drôle.",
+        "Dis 3 jeux de mots pourris.",
+        "Imite quelqu’un qui perd à Tap Up.",
+        "Fais une pub bidon pour un produit imaginaire."
+      ],
+      "Blagues": [
+        "Pourquoi les plongeurs plongent-ils toujours en arrière ?",
+        "C’est l’histoire d’un pingouin...",
+        "Pourquoi le poulet a-t-il traversé la route ?",
+        "Que dit une imprimante à une autre ?",
+        "Quelle est la boisson préférée des programmeurs ?",
+        "Comment appelle-t-on un chat tombé dans un pot de peinture ?",
+        "Pourquoi les squelettes ne se battent jamais entre eux ?",
+        "Que fait une fraise sur un cheval ?",
+        "Pourquoi les poissons vivent-ils dans l’eau salée ?",
+        "Quel est le comble pour un électricien ?"
+      ],
+      "Défis": [
+        "Fais 5 pompes maintenant !",
+        "Crie 'Je suis un génie !' ici et maintenant.",
+        "Fais une grimace pendant 10 secondes.",
+        "Dis l’alphabet à l’envers.",
+        "Tourne sur toi-même 10 fois.",
+        "Dis ta phrase la plus sexy.",
+        "Parle avec un accent pendant 1 minute.",
+        "Fais un selfie et poste-le (ou pas 😜).",
+        "Imite ton animal préféré.",
+        "Fais un discours de président."
+      ],
+      "Mystère": [
+        "Raconte un secret que personne ne connaît.",
+        "Quelle est ta plus grande peur ?",
+        "Si tu pouvais voyager dans le temps, où irais-tu ?",
+        "Si tu devais changer de prénom, lequel choisirais-tu ?",
+        "Quelle est la chose la plus folle que tu aimerais faire ?",
+        "Si tu pouvais lire dans les pensées, tu commencerais par qui ?",
+        "Si tu pouvais être invisible, tu ferais quoi ?",
+        "Un moment où tu as eu honte ?",
+        "Quelle est ta chanson honteuse préférée ?",
+        "Si tu gagnais 1 million, tu fais quoi ?"
+      ],
+      "Dating": [
+        "Ton crush idéal en 3 mots ?",
+        "Premier rendez-vous parfait selon toi ?",
+        "Plutôt messages ou appels ?",
+        "Tu fais le premier pas ?",
+        "Ton date le plus gênant ?",
+        "Ta plus grande qualité en amour ?",
+        "Ton pire défaut en couple ?",
+        "Une chose rédhibitoire chez l’autre ?",
+        "Le plus beau compliment qu’on t’ait fait ?",
+        "Tu crois au coup de foudre ?"
+      ],
+      "Se connaître": [
+        "Quel est ton talent caché ?",
+        "Quel est ton rêve le plus fou ?",
+        "Ta plus grande fierté ?",
+        "Ce que tu changerais chez toi ?",
+        "Ta devise dans la vie ?",
+        "Ton plus beau souvenir ?",
+        "Un moment marquant de ton enfance ?",
+        "Ce qui te rend heureux ?",
+        "Ta plus grande phobie ?",
+        "Ton plat préféré ?"
+      ],
+      "Célibataires": [
+        "Pourquoi es-tu toujours célibataire ? 😜",
+        "Ta dernière date ?",
+        "Ton plan drague préféré ?",
+        "Tu préfères être seul ou mal accompagné ?",
+        "Quel est ton type de personne ?",
+        "As-tu déjà eu le cœur brisé ?",
+        "Tu dragues comment ?",
+        "Appli de rencontre ou IRL ?",
+        "Coup d’un soir ou sérieux ?",
+        "Ton pire râteau ?"
+      ],
+      "Famille": [
+        "Le membre de ta famille le plus drôle ?",
+        "Ton meilleur souvenir en famille ?",
+        "Ton plat familial préféré ?",
+        "As-tu
