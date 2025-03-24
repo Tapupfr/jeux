@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Tap Up 🎮</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="script.js" defer></script>
 </head>
 <body>
   <header>
@@ -20,10 +21,6 @@
     <button data-category="Blagues">🤣 Blagues</button>
     <button data-category="Défis">🔥 Défis</button>
     <button data-category="Mystère">🕵️ Mystère</button>
-    <button data-category="Dating">💘 Dating</button>
-    <button data-category="Se connaître">🤝 Se connaître</button>
-    <button data-category="Célibataires">💃 Célibataires</button>
-    <button data-category="Famille">👨‍👩‍👧‍👦 Famille</button>
   </div>
 
   <h2>👥 Entrez les prénoms des joueurs :</h2>
@@ -35,42 +32,33 @@
 
   <div class="start-button-wrapper">
     <button id="startGame">🎲 Démarrer la partie</button>
+    <button id="replaySameTeam" style="display: none;">🔁 Rejouer avec les mêmes joueurs</button>
   </div>
 
   <footer>© 2025 Tap Up - Tous droits réservés</footer>
 
   <script>
-    document.querySelectorAll("#categories button").forEach(button => {
-      button.onclick = () => {
-        document.querySelectorAll("#categories button").forEach(b => b.classList.remove("selected"));
-        button.classList.add("selected");
-        localStorage.setItem("category", button.dataset.category);
-      };
-    });
+    window.onload = () => {
+      const saved = JSON.parse(localStorage.getItem("players"));
+      if (saved && saved.length) {
+        const container = document.getElementById("playerInputs");
+        container.innerHTML = "";
+        saved.forEach(name => {
+          const input = document.createElement("input");
+          input.value = name;
+          container.appendChild(input);
+        });
 
-    document.getElementById("addPlayer").onclick = () => {
-      const inputs = document.querySelectorAll("#playerInputs input");
-      if (inputs.length < 15) {
-        const input = document.createElement("input");
-        input.placeholder = `Joueur ${inputs.length + 1}`;
-        document.getElementById("playerInputs").appendChild(input);
-      } else {
-        alert("Maximum 15 joueurs !");
+        document.getElementById("replaySameTeam").style.display = "inline-block";
+        document.getElementById("replaySameTeam").onclick = () => {
+          const category = localStorage.getItem("category");
+          if (!category) {
+            alert("Veuillez choisir une catégorie avant de rejouer.");
+            return;
+          }
+          window.location.href = "game.html";
+        };
       }
-    };
-
-    document.getElementById("startGame").onclick = () => {
-      const inputs = document.querySelectorAll("#playerInputs input");
-      const players = Array.from(inputs).map(input => input.value.trim()).filter(Boolean);
-      const category = localStorage.getItem("category");
-
-      if (!category || players.length < 2) {
-        alert("Choisis une catégorie et ajoute au moins 2 joueurs !");
-        return;
-      }
-
-      localStorage.setItem("players", JSON.stringify(players));
-      window.location.href = "game.html";
     };
   </script>
 </body>
