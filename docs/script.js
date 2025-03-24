@@ -1,16 +1,16 @@
 const Categories = {
-  "Culture Générale": Array.from({ length: 100 }, (_, i) => `Question Culture Générale #${i + 1}`),
-  "Humour": Array.from({ length: 100 }, (_, i) => `Question Humour #${i + 1}`),
-  "Blagues": Array.from({ length: 100 }, (_, i) => `Question Blague #${i + 1}`),
-  "Défis": Array.from({ length: 100 }, (_, i) => `Défi #${i + 1}`),
-  "Mystère": Array.from({ length: 100 }, (_, i) => `Question Mystère #${i + 1}`),
-  "Dating": Array.from({ length: 100 }, (_, i) => `Question Dating #${i + 1}`),
-  "Se connaître": Array.from({ length: 100 }, (_, i) => `Question Se connaître #${i + 1}`),
-  "Célibataires": Array.from({ length: 100 }, (_, i) => `Question Célibataire #${i + 1}`),
-  "Famille": Array.from({ length: 100 }, (_, i) => `Question Famille #${i + 1}`)
+  "Culture Générale": Array.from({ length: 10 }, (_, i) => `Question Culture Générale #${i + 1}`),
+  "Humour": Array.from({ length: 10 }, (_, i) => `Question Humour #${i + 1}`),
+  "Blagues": Array.from({ length: 10 }, (_, i) => `Question Blague #${i + 1}`),
+  "Défis": Array.from({ length: 10 }, (_, i) => `Défi #${i + 1}`),
+  "Mystère": Array.from({ length: 10 }, (_, i) => `Question Mystère #${i + 1}`),
+  "Dating": Array.from({ length: 10 }, (_, i) => `Question Dating #${i + 1}`),
+  "Se connaître": Array.from({ length: 10 }, (_, i) => `Question Se connaître #${i + 1}`),
+  "Célibataires": Array.from({ length: 10 }, (_, i) => `Question Célibataire #${i + 1}`),
+  "Famille": Array.from({ length: 10 }, (_, i) => `Question Famille #${i + 1}`)
 };
 
-const Gages = Array.from({ length: 100 }, (_, i) => `Gage #${i + 1}`);
+const Gages = Array.from({ length: 10 }, (_, i) => `Gage #${i + 1}`);
 
 let currentCategory = null;
 let players = [];
@@ -48,11 +48,12 @@ startButton.addEventListener("click", () => {
   questionsAsked = [];
   currentPlayerIndex = 0;
 
-  const gameWindow = window.open("", "GameWindow", "width=600,height=600");
-  gameWindow.document.write(`<div id="questionContainer" style="font-family: sans-serif; padding: 20px;"></div>`);
-  gameWindow.document.write(`<div id="scoresContainer" style="font-family: sans-serif; padding: 20px;"></div>`);
+  const gameWindow = window.open("game.html", "GameWindow", "width=600,height=700");
 
-  showNextQuestion(gameWindow);
+  gameWindow.onload = function() {
+    updateScores(gameWindow);
+    showNextQuestion(gameWindow);
+  };
 });
 
 function pickRandomQuestion() {
@@ -64,7 +65,9 @@ function pickRandomQuestion() {
 }
 
 function updateScores(gameWindow) {
-  const scoresHtml = Object.entries(scores).map(([player, score]) => `<p>${player}: ${score}</p>`).join("");
+  const scoresHtml = Object.entries(scores)
+    .map(([player, score]) => `<p>${player}: ${score}</p>`)
+    .join("");
   gameWindow.document.getElementById("scoresContainer").innerHTML = `<h3>Scores actuels :</h3>${scoresHtml}`;
 }
 
@@ -88,8 +91,8 @@ function showNextQuestion(gameWindow) {
   }
 
   gameWindow.document.getElementById("questionContainer").innerHTML = `
-    <div style="font-weight:bold; font-size:1.2em;">🔥 À toi de jouer, ${player} !</div>
-    <div style="margin:10px 0;">${question}</div>
+    <div class="player-highlight">🔥 À toi de jouer, ${player} !</div>
+    <div class="question-text">${question}</div>
     <button id="success">✅ Réussi</button>
     <button id="fail">❌ Échoué</button>
   `;
@@ -114,7 +117,7 @@ function endGame(gameWindow) {
   const loser = losers[Math.floor(Math.random() * losers.length)];
 
   gameWindow.document.getElementById("questionContainer").innerHTML = `
-    <div style="font-weight:bold; color:red;">😅 Dommage ${loser}, tu es notre grand perdant !</div>
+    <div class="loser-announcement">😅 Dommage ${loser}, tu es notre grand perdant !</div>
     <button id="showGage">🎭 Découvrir mon gage</button>
   `;
 
@@ -126,9 +129,9 @@ function showGage(gameWindow) {
   const randomGage = Gages[Math.floor(Math.random() * Gages.length)];
 
   gameWindow.document.getElementById("questionContainer").innerHTML = `
-    <div style="font-size:1.2em; color:blue;">${randomGage}</div>
+    <div class="gage">${randomGage}</div>
     <button id="replay">🔄 Rejouer</button>
   `;
 
-  gameWindow.document.getElementById("replay").onclick = () => location.reload();
+  gameWindow.document.getElementById("replay").onclick = () => gameWindow.close();
 }
