@@ -72,4 +72,75 @@ button.fail-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 0 8px #fff;
 }
+#questionContainer {
+  margin-top: 2rem;
+  padding: 24px;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 0 15px #ffffff66;
+  max-width: 600px;
+  width: 90%;
+  color: #222;
+}
+
+#questionContainer p {
+  font-size: 1.1rem;
+  margin: 12px 0;
+  line-height: 1.5;
+}
+
+.question-text {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-top: 10px;
+  color: #111;
+}
+
+.end-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+  color: #222;
+}
+
+.end-sub {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+  color: #444;
+}
+
+.gage-text {
+  font-size: 1.3rem;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #111;
+}
+
+button.success-btn,
+button.fail-btn {
+  padding: 12px 20px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 10px;
+  margin: 8px 10px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+button.success-btn {
+  background-color: #b9fbc0;
+  color: #111;
+}
+
+button.fail-btn {
+  background-color: #ffadad;
+  color: #111;
+}
+
+button.success-btn:hover,
+button.fail-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #fff;
+}
 
