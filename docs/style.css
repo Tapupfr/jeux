@@ -35,9 +35,16 @@ h1 {
   text-shadow: 0 0 10px #ffffff;
 }
 
+.intro {
+  font-size: 1rem;
+  margin: 0.5rem 0 1.5rem;
+  opacity: 0.9;
+}
+
 h2 {
   font-size: 1.4rem;
-  margin: 1rem 0;
+  margin: 1rem 0 0.6rem;
+  text-shadow: 0 0 6px #fff;
 }
 
 .category-grid {
@@ -110,71 +117,9 @@ button {
   color: black;
 }
 
-.success-btn,
-.fail-btn {
-  padding: 12px 20px;
-  margin: 8px;
-  border: none;
-  border-radius: 10px;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: bold;
-  transition: all 0.3s ease;
-}
-
-.success-btn {
-  background-color: #b9fbc0;
-  color: #111;
-}
-
-.fail-btn {
-  background-color: #ffadad;
-  color: #111;
-}
-
-.success-btn:hover,
-.fail-btn:hover,
-#addPlayer:hover,
-#startGame:hover {
+button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 10px #fff;
-}
-
-.question-box {
-  margin-top: 30px;
-  padding: 20px;
-  background: white;
-  color: #222;
-  border-radius: 16px;
-  box-shadow: 0 0 20px #fff4;
-  max-width: 500px;
-  text-align: center;
-  animation: fadeIn 0.6s ease-out;
-}
-
-.question-text {
-  font-size: 1.2rem;
-  margin: 10px 0 20px;
-}
-
-.end-title {
-  font-size: 1.5rem;
-  margin-bottom: 12px;
-  color: #fff;
-  text-shadow: 0 0 10px #fff;
-}
-
-.end-sub {
-  font-size: 1.1rem;
-  margin-bottom: 16px;
-  color: #eee;
-}
-
-.gage-text {
-  font-size: 1.3rem;
-  margin: 10px 0;
-  color: #111;
-  text-align: center;
 }
 
 footer {
@@ -186,11 +131,6 @@ footer {
   padding: 20px 0;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(15px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
 @media (max-width: 480px) {
   .category-grid {
     grid-template-columns: 1fr 1fr;
@@ -199,4 +139,9 @@ footer {
   .player-inputs input {
     flex: 1 1 100%;
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
 }
