@@ -1,4 +1,4 @@
-<!-- game.html -->
+<!-- game.html - Version corrigée avec gage révélé après clic -->
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -131,16 +131,16 @@
     };
 
     const Gages = [
-      "Danse comme un robot pendant 10 secondes !",
-      "Parle comme un enfant pendant 2 minutes.",
-      "Fais le tour de la pièce en rampant.",
-      "Fais une déclaration d’amour à une chaise.",
-      "Récite l’alphabet à l’envers en chantant.",
       "Fais 10 squats pendant qu’on te regarde.",
-      "Crie 'Tap Up est le meilleur jeu !'",
-      "Fais une imitation d’un animal pendant 15 secondes.",
-      "Appelle quelqu’un et chante-lui une chanson.",
-      "Prends une voix grave et parle comme Dark Vador."
+      "Chante une chanson au hasard devant tout le monde.",
+      "Fais une déclaration d'amour à une chaise.",
+      "Répète 'Tap Up est le meilleur' 5 fois avec passion.",
+      "Fais une pose de mannequin pendant 15 secondes.",
+      "Danse sans musique pendant 20 secondes.",
+      "Imite une célébrité jusqu'à ce qu’on devine.",
+      "Dis une phrase romantique en criant.",
+      "Fais un animal en mime.",
+      "Tourne sur toi-même et dis l’alphabet à l’envers."
     ];
 
     const players = JSON.parse(localStorage.getItem("players"));
@@ -201,12 +201,20 @@
       const gage = Gages[Math.floor(Math.random() * Gages.length)];
 
       document.getElementById("questionContainer").innerHTML = `
-        <p>😅 Dommage <strong>${loser}</strong>, tu as perdu !</p>
-        <p>🎭 Ton gage : <strong>${gage}</strong></p>
-        <button onclick="location.href='index.html'">🔁 Rejouer</button>
+        <p class="end-title">😅 Dommage <strong>${loser}</strong>, tu as perdu !</p>
+        <p class="end-sub">🎭 Clique pour découvrir ton gage :</p>
+        <button class="success-btn" onclick="revealGage('${gage}')">🎁 Découvrir le gage</button>
       `;
 
       updateScores();
+    }
+
+    function revealGage(gage) {
+      document.getElementById("questionContainer").innerHTML = `
+        <p class="gage-text">🎭 Ton gage :</p>
+        <p class="gage-text"><strong>${gage}</strong></p>
+        <button class="fail-btn" onclick="location.href='index.html'">🔁 Rejouer</button>
+      `;
     }
 
     window.onload = nextQuestion;
