@@ -1,99 +1,201 @@
+/* style.css - Tap Up UI futuriste & responsive */
+
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
 * {
   box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
 body {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: 'Orbitron', sans-serif;
   background: linear-gradient(135deg, #a0c4ff, #ffc6ff);
   color: #fff;
-  margin: 0;
-  padding: 10px;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  overflow-x: hidden;
+  padding: 20px;
 }
 
 header {
   text-align: center;
-  margin: 2rem 0;
+  margin-bottom: 1.5rem;
+  animation: fadeIn 1s ease-out;
 }
 
 .logo {
   width: 160px;
   height: auto;
-  margin: 0 auto 15px;
+  margin-bottom: 10px;
+  filter: drop-shadow(0 0 5px #ffffffaa);
 }
 
-h1 { font-size: 2rem; }
-.intro { font-size: 1rem; }
+h1 {
+  font-size: 2.2rem;
+  text-shadow: 0 0 10px #ffffff;
+}
+
+.intro {
+  font-size: 1rem;
+  margin-top: 0.5rem;
+  opacity: 0.85;
+}
+
+h2 {
+  font-size: 1.4rem;
+  margin: 1rem 0 0.6rem;
+  text-shadow: 0 0 6px #fff;
+}
 
 .category-grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  width: 100%;
+  max-width: 600px;
+  margin-bottom: 2rem;
 }
 
 .category-grid button {
-  padding: 0.5rem 1rem;
-  border-radius: 10px;
+  padding: 12px;
   border: none;
-  cursor: pointer;
-  background: linear-gradient(to right, #a0c4ff, #ffc6ff);
+  border-radius: 12px;
+  background: linear-gradient(to right, #d0bfff, #ffafcc);
   color: #000;
-  flex: 1 1 45%;
-  max-width: 180px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  box-shadow: 0 0 5px #ffffff88;
+  cursor: pointer;
+}
+
+.category-grid button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 12px #fff;
 }
 
 .category-grid .selected {
-  background: #7dcfff;
-  font-weight: bold;
+  background: #ffc8dd;
+  box-shadow: 0 0 15px #fff;
+  transform: scale(1.08);
 }
 
 .player-inputs {
   display: flex;
   flex-wrap: wrap;
+  gap: 10px;
   justify-content: center;
-  gap: 8px;
-  margin: 1rem;
+  margin-bottom: 1rem;
+  max-width: 600px;
 }
 
 .player-inputs input {
-  flex: 1 1 45%;
-  max-width: 150px;
-  padding: 0.5rem;
-  border-radius: 6px;
+  flex: 1 1 40%;
+  min-width: 120px;
+  padding: 10px;
+  border-radius: 10px;
   border: none;
+  font-size: 1rem;
 }
 
-#addPlayer, #startGame {
-  padding: 0.6rem 1.2rem;
-  margin-top: 10px;
-  cursor: pointer;
-  border-radius: 8px;
+button {
+  font-family: 'Orbitron', sans-serif;
+}
+
+#addPlayer,
+#startGame {
+  padding: 12px 20px;
+  margin: 6px;
+  font-size: 1rem;
+  border-radius: 10px;
   border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
   font-weight: bold;
 }
 
-#startGame {
-  background-color: #ffb3c1;
+#addPlayer {
+  background-color: #ffffff;
+  color: #333;
 }
 
-#questionContainer {
-  display: none;
-  padding: 1.5rem;
-  margin-top: 20px;
-  background: white;
+#startGame {
+  background: #ffafcc;
   color: black;
-  border-radius: 12px;
-  text-align: center;
+}
+
+#addPlayer:hover,
+#startGame:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #fff;
+}
+
+.question-box {
+  margin-top: 30px;
+  padding: 20px;
+  background: white;
+  color: #222;
+  border-radius: 16px;
+  box-shadow: 0 0 20px #fff4;
   max-width: 500px;
+  text-align: center;
+  animation: fadeIn 0.6s ease-out;
+}
+
+.question-text {
+  font-size: 1.2rem;
+  margin: 10px 0 20px;
+}
+
+.success-btn,
+.fail-btn {
+  padding: 12px 20px;
+  margin: 8px;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+}
+
+.success-btn {
+  background-color: #b9fbc0;
+  color: #111;
+}
+
+.fail-btn {
+  background-color: #ffadad;
+  color: #111;
+}
+
+.success-btn:hover,
+.fail-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 10px #fff;
 }
 
 footer {
   margin-top: auto;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
+  color: #fff;
+  text-align: center;
+  opacity: 0.7;
+  padding: 20px 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 480px) {
+  .category-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .player-inputs input {
+    flex: 1 1 100%;
+  }
 }
