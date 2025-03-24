@@ -21,6 +21,10 @@
     <button data-category="Blagues">🤣 Blagues</button>
     <button data-category="Défis">🔥 Défis</button>
     <button data-category="Mystère">🕵️ Mystère</button>
+    <button data-category="Dating">💘 Dating</button>
+    <button data-category="Se connaître">🤝 Se connaître</button>
+    <button data-category="Célibataires">💃 Célibataires</button>
+    <button data-category="Famille">👨‍👩‍👧‍👦 Famille</button>
   </div>
 
   <h2>👥 Entrez les prénoms des joueurs :</h2>
@@ -32,7 +36,6 @@
 
   <div class="start-button-wrapper">
     <button id="startGame">🎲 Démarrer la partie</button>
-    <button id="replaySameTeam" style="display: none;">🔁 Rejouer avec les mêmes joueurs</button>
   </div>
 
   <footer>© 2025 Tap Up - Tous droits réservés</footer>
@@ -48,16 +51,6 @@
           input.value = name;
           container.appendChild(input);
         });
-
-        document.getElementById("replaySameTeam").style.display = "inline-block";
-        document.getElementById("replaySameTeam").onclick = () => {
-          const category = localStorage.getItem("category");
-          if (!category) {
-            alert("Veuillez choisir une catégorie avant de rejouer.");
-            return;
-          }
-          window.location.href = "game.html";
-        };
       }
     };
   </script>
